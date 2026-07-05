@@ -2595,31 +2595,57 @@
       .dcard.open {
         background: rgba(255, 255, 255, 0.02);
       }
+      /* DECK MESSAGE = the SAME format as a chat message (owner 2026-07-05, ADOPTED STANDARD «мы на одной
+         странице»): mirror the .m grammar 1:1 — 36px avatar (scales with aA), name·role·TIME inline header,
+         text below. So a notification from Anna reads identically in the deck and in the chat thread. */
       .drow {
-        padding: 6px 9px;
-        gap: 9px;
-        border-radius: 8px;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 8px 10px;
+        border-radius: 10px;
       }
       .drow:hover {
         background: rgba(255, 255, 255, 0.045);
       }
-      /* ONE neutral avatar (drop the blue-tinted chip); holds an initial OR a type-icon */
       .drow .dav {
-        width: 22px;
-        height: 22px;
+        width: var(--cs-av);
+        height: var(--cs-av);
+        margin-top: 2px;
+        font-size: calc(14px * var(--cs-font) / 15);
         background: var(--panel2);
         border: 1px solid var(--line2);
         color: var(--soft);
       }
       .drow .dav svg {
-        width: 13px;
-        height: 13px;
+        width: 54%;
+        height: 54%;
+      }
+      /* header line — name + role + time inline (mirror .m .hd) */
+      .dhd {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 2px;
       }
       .drow .dnm {
+        font-size: var(--cs-font);
         line-height: 1.2;
+        flex: 0 1 auto;
+      }
+      .drow .dhd .dts {
+        flex: none;
+        font-size: calc(11px * var(--cs-font) / 15);
+        color: var(--mut);
       }
       .drow .dsum {
-        line-height: 1.2;
+        font-size: calc(13.5px * var(--cs-font) / 15);
+        color: var(--soft);
+        line-height: 1.3;
+      }
+      /* status pill + chevron ride the top of the message (align with the name line) */
+      .drow .dstat,
+      .drow .dchev {
+        margin-top: 3px;
       }
       /* groomer aligned to the row rhythm, NO face — the panel IS the assistant */
       .groom {
@@ -2958,11 +2984,13 @@
                   <span class="du" aria-label="Unread"></span>
                   <span class="dav">A</span>
                   <span class="dtext">
-                    <span class="dnm">Anna <span class="drole">· Director</span></span>
+                    <span class="dhd">
+                      <span class="dnm">Anna <span class="drole">· Director</span></span>
+                      <span class="dts">14:22</span>
+                    </span>
                     <span class="dsum">Sent Hero-shot · Take 4 back — needs a lighting pass</span>
                   </span>
                   <span class="dstat retake"><span class="sd"></span>Retake</span>
-                  <span class="dts">14:22</span>
                   <span class="dchev"
                     ><svg
                       viewBox="0 0 24 24"
@@ -3011,11 +3039,13 @@
                   <span class="du read"></span>
                   <span class="dav">A</span>
                   <span class="dtext">
-                    <span class="dnm">Anna <span class="drole">· Director</span></span>
+                    <span class="dhd">
+                      <span class="dnm">Anna <span class="drole">· Director</span></span>
+                      <span class="dts">Yesterday</span>
+                    </span>
                     <span class="dsum">Approved Establishing · Take 2</span>
                   </span>
                   <span class="dstat approved"><span class="sd"></span>Approved</span>
-                  <span class="dts">Yesterday</span>
                   <span class="dchev"
                     ><svg
                       viewBox="0 0 24 24"
@@ -3069,7 +3099,10 @@
                       <path d="M10 22h4" /></svg
                   ></span>
                   <span class="dtext">
-                    <span class="dnm">Knowledge Hub</span>
+                    <span class="dhd">
+                      <span class="dnm">Knowledge Hub</span>
+                      <span class="dts">14:20</span>
+                    </span>
                     <span class="dsum">On flat lighting — a fix for the retake</span>
                   </span>
                   <span class="dstat tip"><span class="sd"></span>Tip</span>
