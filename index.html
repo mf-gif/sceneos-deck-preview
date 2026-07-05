@@ -3937,6 +3937,13 @@
               row.setAttribute('aria-expanded', open ? 'true' : 'false');
             };
             deckEl.addEventListener('click', (e) => {
+              // opening/clicking a notification marks it READ → its avatar glow drops (owner 2026-07-05,
+              // «при нажатии — упс, свечение снимается»). Fades via the .dav box-shadow transition.
+              const card = e.target.closest('[data-card]');
+              if (card) {
+                const av = card.querySelector('.dav.unread');
+                if (av) av.classList.remove('unread');
+              }
               const row = e.target.closest('[data-drow]');
               if (row) toggleRow(row);
             });
