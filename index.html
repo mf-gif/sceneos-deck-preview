@@ -3185,8 +3185,7 @@
         // icon set (message-actions / buttons) — defined BEFORE CONV so template literals can read it
         const ICN = {
           copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
-          eyeoff:
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18 18 0 0 1-2.16 3.19M6.6 6.6A18 18 0 0 0 2 12s3 8 10 8a9.1 9.1 0 0 0 4.4-1.1"/><path d="M1 1l22 22"/></svg>',
+          cut: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>',
           insert:
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>',
           reply:
@@ -3479,8 +3478,8 @@
           <div class="afbody">
             <p>Take <span class="asg-count">15 items</span> out of cut on this shot? Nothing is deleted — everything stays restorable.</p>
             <div class="asg-list">
-              <div class="asg-row"><span class="asg-ic" style="color:var(--mut)">${ICN.eyeoff}</span><span class="asg-nm"><b>12</b> failed generations</span></div>
-              <div class="asg-row"><span class="asg-ic" style="color:var(--mut)">${ICN.eyeoff}</span><span class="asg-nm"><b>3</b> unused drafts</span></div>
+              <div class="asg-row"><span class="asg-ic" style="color:var(--mut)">${ICN.cut}</span><span class="asg-nm"><b>12</b> failed generations</span></div>
+              <div class="asg-row"><span class="asg-ic" style="color:var(--mut)">${ICN.cut}</span><span class="asg-nm"><b>3</b> unused drafts</span></div>
             </div>
             <div class="asg-skip">
               <div class="asg-skiplabel">Kept in cut</div>
@@ -3491,7 +3490,7 @@
           <div class="affoot">
             <a class="undo" style="display: none" data-toast="Restored — 15 items back in cut">Undo</a>
             <button class="pbtn cancel" data-toast="Okay — nothing changed">Not now</button>
-            <button class="pbtn confirm" data-confirm data-undo="1" data-done="Tidied · 15 out of cut">${ICN.eyeoff}<span class="lab">Tidy up</span></button>
+            <button class="pbtn confirm" data-confirm data-undo="1" data-done="Tidied · 15 out of cut">${ICN.cut}<span class="lab">Tidy up</span></button>
           </div>
         </div>`,
           },
