@@ -1691,12 +1691,19 @@
         width: 18px;
         height: 18px;
       }
-      /* BIG scene preview (owner 2026-07-05: «сделай изображение сцены визуально важной частью» — the take
-         frame is the visual anchor of the expanded card; the old thumb was too small to read). 16:9. */
+      /* TWO-COLUMN expanded card (owner 2026-07-05: «в треть ширины — изображение, две трети — реквизиты
+         справа». The full-width 16:9 was too tall — two cards ate the space). Media object: image 1/3 left
+         (fills the column height), all fields 2/3 right. */
+      .crow {
+        display: flex;
+        gap: 11px;
+        align-items: stretch;
+        padding: 11px 13px 12px;
+      }
       .cprev {
-        display: block;
-        margin: 11px 13px 0;
-        aspect-ratio: 16 / 9;
+        flex: 0 0 34%;
+        align-self: stretch;
+        min-height: 82px;
         border-radius: 10px;
         overflow: hidden;
         border: 1px solid var(--line);
@@ -1709,9 +1716,19 @@
         height: 100%;
         object-fit: cover;
       }
-      /* meta as a block UNDER the preview (was a flex sibling of the tiny thumb) */
+      .cright {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      /* fields sit flush in the right column (crow provides the padding) */
       .cmeta.cmeta-blk {
-        padding: 9px 13px 0;
+        padding: 0;
+      }
+      .cright .cnote {
+        padding: 0;
       }
       /* whole expanded card = a LINK into the scene (owner 2026-07-05: «все это сообщение — по сути ссылка
          в эту сцену», no separate buttons). Cursor + subtle hover; a discreet pill hint on hover only
@@ -2972,23 +2989,27 @@
                   ></span>
                 </div>
                 <div class="ddetail" data-scenelink data-toast="Opening Scene 3 · North Wind…">
-                  <a class="cprev"
-                    ><img
-                      src="https://picsum.photos/seed/heroshot4/600/338"
-                      alt="Hero-shot · Take 4"
-                  /></a>
-                  <div class="cmeta cmeta-blk">
-                    <div class="ct">Hero-shot · Take 4</div>
-                    <div class="cs">
-                      <span>Neon Nights</span><span class="dot">·</span><span>Scene 3</span
-                      ><span class="dot">·</span><span>North Wind</span>
-                    </div>
-                  </div>
-                  <div class="cnote">
-                    <div class="nl">Anna's note</div>
-                    <div class="nq">
-                      Lighting reads flat — no separation from the back wall. Push a warm key from
-                      camera-left and add a soft rim so the silhouette pops.
+                  <div class="crow">
+                    <a class="cprev"
+                      ><img
+                        src="https://picsum.photos/seed/heroshot4/600/338"
+                        alt="Hero-shot · Take 4"
+                    /></a>
+                    <div class="cright">
+                      <div class="cmeta cmeta-blk">
+                        <div class="ct">Hero-shot · Take 4</div>
+                        <div class="cs">
+                          <span>Neon Nights</span><span class="dot">·</span><span>Scene 3</span
+                          ><span class="dot">·</span><span>North Wind</span>
+                        </div>
+                      </div>
+                      <div class="cnote">
+                        <div class="nl">Anna's note</div>
+                        <div class="nq">
+                          Lighting reads flat — no separation from the back wall. Push a warm key
+                          from camera-left and add a soft rim so the silhouette pops.
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- actions + bottom-time REMOVED (owner 2026-07-05): the whole card is a link into the
@@ -3021,16 +3042,20 @@
                   ></span>
                 </div>
                 <div class="ddetail" data-scenelink data-toast="Opening Scene 1 · North Wind…">
-                  <a class="cprev"
-                    ><img
-                      src="https://picsum.photos/seed/establishing2/600/338"
-                      alt="Establishing · Take 2"
-                  /></a>
-                  <div class="cmeta cmeta-blk">
-                    <div class="ct soft">Establishing · Take 2 approved</div>
-                    <div class="cs">
-                      <span>Neon Nights</span><span class="dot">·</span><span>Scene 1</span
-                      ><span class="dot">·</span><span>North Wind</span>
+                  <div class="crow">
+                    <a class="cprev"
+                      ><img
+                        src="https://picsum.photos/seed/establishing2/600/338"
+                        alt="Establishing · Take 2"
+                    /></a>
+                    <div class="cright">
+                      <div class="cmeta cmeta-blk">
+                        <div class="ct soft">Establishing · Take 2 approved</div>
+                        <div class="cs">
+                          <span>Neon Nights</span><span class="dot">·</span><span>Scene 1</span
+                          ><span class="dot">·</span><span>North Wind</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <span class="scenelink-hint">Open scene →</span>
