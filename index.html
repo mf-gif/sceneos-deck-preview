@@ -3185,6 +3185,8 @@
         // icon set (message-actions / buttons) — defined BEFORE CONV so template literals can read it
         const ICN = {
           copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+          eyeoff:
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18 18 0 0 1-2.16 3.19M6.6 6.6A18 18 0 0 0 2 12s3 8 10 8a9.1 9.1 0 0 0 4.4-1.1"/><path d="M1 1l22 22"/></svg>',
           insert:
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>',
           reply:
@@ -3456,6 +3458,43 @@
           </div>
         </div>`,
           },
+
+          // 12 — CLEANUP / «приберись»: the user has piled up failed generations + unused drafts on a
+          // shot; asks the assistant to tidy up. SHOW-FIRST-THEN-APPLY preview (confirm lane, effect
+          // cleanup_generations_preview). Reuses the ratified .actform confirm chassis 1:1. Owner-ratified
+          // model (2026-07-05): zero-deletion — «cut» = REVERSIBLE out-of-cut (is_hidden), everything
+          // restorable; soft mode + Undo; never «delete». Copy = out-of-cut / «убери с глаз». Payload:
+          // willHide {failed, drafts} / kept (approved + in-cut, protected) / counts. Scope = scene AND refs.
+          {
+            who: 'you',
+            t: '10:41',
+            html: `<p>tidy up this shot — clear the failed ones</p>`,
+          },
+          {
+            who: 'jason',
+            t: '10:41',
+            html: `<p>Here's what I'll take out of cut — nothing's deleted, you can restore any time:</p>
+        <div class="actform">
+          <div class="afh"><span class="aft"><span class="dot"></span>Tidy up</span><span><b>Scene 4</b> — Rooftop</span></div>
+          <div class="afbody">
+            <p>Take <span class="asg-count">15 items</span> out of cut on this shot? Nothing is deleted — everything stays restorable.</p>
+            <div class="asg-list">
+              <div class="asg-row"><span class="asg-ic" style="color:var(--mut)">${ICN.eyeoff}</span><span class="asg-nm"><b>12</b> failed generations</span></div>
+              <div class="asg-row"><span class="asg-ic" style="color:var(--mut)">${ICN.eyeoff}</span><span class="asg-nm"><b>3</b> unused drafts</span></div>
+            </div>
+            <div class="asg-skip">
+              <div class="asg-skiplabel">Kept in cut</div>
+              <div class="asg-row skip"><span class="asg-nm"><b>Take 4</b> — approved</span><span class="reasonchip">Protected</span></div>
+              <div class="asg-row skip"><span class="asg-nm"><b>4 takes</b> in use</span><span class="reasonchip">In cut</span></div>
+            </div>
+          </div>
+          <div class="affoot">
+            <a class="undo" style="display: none" data-toast="Restored — 15 items back in cut">Undo</a>
+            <button class="pbtn cancel" data-toast="Okay — nothing changed">Not now</button>
+            <button class="pbtn confirm" data-confirm data-undo="1" data-done="Tidied · 15 out of cut">${ICN.eyeoff}<span class="lab">Tidy up</span></button>
+          </div>
+        </div>`,
+          },
         ];
 
         function ment(kind, label) {
@@ -3681,6 +3720,12 @@
           if (lab) lab.textContent = btn.dataset.done || 'Done';
           btn.classList.add('done');
           toast(btn.dataset.done || 'Done');
+          // Soft-mode: reveal the Undo affordance on a reversible action (cleanup out-of-cut).
+          if (btn.dataset.undo) {
+            const foot = btn.closest('.affoot');
+            const u = foot && foot.querySelector('.undo');
+            if (u) u.style.display = '';
+          }
         }
         // prompt-analysis proposal toggles — flip one Apply/Reject; master flips all; keep master in sync.
         function syncMaster(host) {
