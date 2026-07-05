@@ -1730,35 +1730,22 @@
       .cright .cnote {
         padding: 0;
       }
-      /* whole expanded card = a LINK into the scene (owner 2026-07-05: «все это сообщение — по сути ссылка
-         в эту сцену», no separate buttons). Cursor + subtle hover; a discreet pill hint on hover only
-         (zero layout cost — space stays tight). */
+      /* whole expanded card = ONE clickable block → the scene (owner 2026-07-05: «активируется вся плашка»
+         — unify the hover, round ALL edges, drop the «Open scene» pill + the separate image-hover; the
+         rounded block + a single hover highlight already reads as clickable). */
       .ddetail[data-scenelink] {
-        position: relative;
+        margin: 0 8px 9px;
+        border-top: 0;
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.022);
         cursor: pointer;
+        transition:
+          background 0.12s,
+          box-shadow 0.12s;
       }
       .ddetail[data-scenelink]:hover {
-        background: rgba(255, 255, 255, 0.03);
-      }
-      .ddetail[data-scenelink]:hover .cprev {
-        border-color: rgba(110, 91, 255, 0.55);
-      }
-      .scenelink-hint {
-        position: absolute;
-        right: 12px;
-        bottom: 9px;
-        font-size: 10.5px;
-        font-weight: 600;
-        color: #6f9dff;
-        background: rgba(18, 18, 26, 0.82);
-        padding: 2px 8px;
-        border-radius: 999px;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.12s;
-      }
-      .ddetail[data-scenelink]:hover .scenelink-hint {
-        opacity: 0.95;
+        background: rgba(255, 255, 255, 0.055);
+        box-shadow: inset 0 0 0 1px rgba(110, 91, 255, 0.45);
       }
       /* the Chat/Deck bar is the drag-to-MOVE handle (owner 2026-07-05) — grab its empty area; tabs/A-A
          keep their pointer. */
@@ -3014,7 +3001,6 @@
                   </div>
                   <!-- actions + bottom-time REMOVED (owner 2026-07-05): the whole card is a link into the
                        scene (no separate buttons); time shown once, in the top row. -->
-                  <span class="scenelink-hint">Open scene →</span>
                 </div>
               </div>
 
@@ -3058,7 +3044,6 @@
                       </div>
                     </div>
                   </div>
-                  <span class="scenelink-hint">Open scene →</span>
                 </div>
               </div>
 
@@ -3122,9 +3107,6 @@
                         Anna's note points to a separation issue. The
                         <span class="refm">Warm-key + rim</span> recipe in the reference book
                         matches this exactly.
-                      </div>
-                      <div style="margin-top: 9px">
-                        <span class="scenelink-hint">Open recipe →</span>
                       </div>
                     </div>
                   </div>
