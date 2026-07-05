@@ -1,0 +1,195 @@
+/* ============================================================
+   SceneOS — shared UI theme  (SINGLE SOURCE OF TRUTH)
+   Change colours / fonts / type / base components HERE and every
+   screen that links this file updates. Pair with sceneos-theme.js
+   (the Tailwind token mirror, loaded after the Tailwind CDN).
+   Keep all prototype files in the SAME folder as this file.
+   ============================================================ */
+
+/* --- Fonts: Clash Display (headings) + General Sans (everything), plus the
+   #406 owner-ratified Cyrillic metric companions Geologica + Onest (Brand Bible
+   03-type #cyrillic): the primaries have ZERO Cyrillic glyphs — EN rendering
+   unchanged, companions only catch glyphs the primaries miss. --- */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Onest:wght@400;500;600&display=swap');
+
+:root {
+  --grad: linear-gradient(120deg, #3d7bff 0%, #6e5bff 100%);
+  --ink: #08080b;
+  --panel: #101015;
+  --panel2: #16161d;
+  --line: #23232c;
+  --mut: #8a8a99;
+  --soft: #b9b9c6;
+  --text: #e9e9f0;
+  --acc: #4d7dff;
+  --acc2: #6e5bff;
+  --vid: #ff5c8a;
+  --img: #ff9a3d;
+  --ok: #34d399;
+  --star: #fbbf24;
+  --warn: #fbbf24;
+  --bad: #fb6a5e;
+  /* Reference media-kind color language (B, ratified 2026-06-11; Olive brand-lead naming).
+     Semantic ALIASES on brand tokens — single source for all 6 ref surfaces (@-mentions, lists,
+     chips, picker, bible grid, reference-detail). Image is DELIBERATELY --acc (calm blue), NOT
+     --img orange — the alias locks that intent so no one "fixes" it back to an orange flood.
+     Two orthogonal axes: TYPE = dot color; MEDIA = handle color + glyph (video is the exception). */
+  --ref-image: var(--acc);
+  --ref-video: var(--vid);
+}
+
+/* --- Base --- */
+html {
+  font-size: 112%;
+}
+html,
+body {
+  background: var(--ink);
+}
+body {
+  font-family: 'General Sans', 'Onest', sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  /* Ambient gradient — Block 14 archetype A · Halo (default). Soft centre
+     spotlight backed by а wider blue halo. Fixed attachment so app-shell
+     scroll doesn't drag the gradient. */
+  background:
+    radial-gradient(45% 38% at 50% 50%, rgba(110, 91, 255, 0.22), transparent 70%),
+    radial-gradient(78% 62% at 50% 52%, rgba(61, 123, 255, 0.1), transparent 80%), var(--ink);
+  background-attachment: fixed;
+}
+
+/* Ambient tone archetypes — opt-in via body class. Block 14 governance.
+   Never mix tones inside one screen; pick one per route. */
+body.tone-anchor {
+  /* Upper-right anchor — navigation / overview / index surfaces. Glow pulls eye
+     to action-rich zone near header. */
+  background:
+    radial-gradient(48% 42% at 78% 18%, rgba(110, 91, 255, 0.2), transparent 70%),
+    radial-gradient(72% 55% at 32% 72%, rgba(61, 123, 255, 0.08), transparent 80%), var(--ink);
+  background-attachment: fixed;
+}
+body.tone-soft {
+  /* Bottom-left soft — data-heavy lists (scenes list, bible, asset inventory).
+     Gradient sits behind content, doesn't compete with the grid. */
+  background:
+    radial-gradient(55% 45% at 22% 88%, rgba(110, 91, 255, 0.16), transparent 70%),
+    radial-gradient(60% 50% at 75% 30%, rgba(61, 123, 255, 0.08), transparent 80%), var(--ink);
+  background-attachment: fixed;
+}
+
+/* Frosted surface — full-bleed bars (headers / docked sidebars) that should
+   let the body ambient gradient breathe through. Semi-transparent ink + blur
+   keeps chrome readable while preserving the gradient signal. */
+.frost {
+  background: rgba(8, 8, 11, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.font-display {
+  font-family: 'Clash Display', 'Geologica', sans-serif;
+}
+/* `mono` kept as a utility class but is now the body font with aligned numerals
+   (the 3rd font, JetBrains Mono, is removed) — use it for IDs / figures. */
+.mono {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Accents / surfaces --- */
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.grad-bg {
+  background: var(--grad);
+}
+.frame {
+  background: #0d0d12;
+}
+.imgcover {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Base components --- */
+.card {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+.chk {
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--grad);
+  color: #08080b;
+}
+.chk svg {
+  width: 9px;
+  height: 9px;
+}
+
+/* --- Scrollbar --- */
+.scrollthin::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollthin::-webkit-scrollbar-thumb {
+  background: #2a2a35;
+  border-radius: 9px;
+}
+
+/* --- Motion --- */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pop {
+  animation: pop 0.35s both;
+}
+
+/* --- Forms: hide the useless number-input spinner (▲▼ steppers) --- */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* --- A11y: visible keyboard focus ring (DB-6) --- */
+:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- A11y: honour prefers-reduced-motion (RC-10) — kill animations/transitions for users who ask --- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
