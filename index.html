@@ -1421,6 +1421,9 @@
         align-items: center;
         gap: 5px;
         padding: 1px 12px 5px;
+        /* the top plashka IS the move handle now (grabber removed, owner 2026-07-06) — empty bar space
+           reads as draggable; the tab/aA/collapse buttons override with cursor: pointer. */
+        cursor: grab;
       }
       .modetab {
         position: relative;
@@ -2355,7 +2358,10 @@
         transform: translateY(-50%) scaleX(1.15);
       }
       .rh-b {
-        bottom: 3px;
+        /* TOP edge (owner «resize должен быть вверху, а не внизу» 2026-07-06): the popup is bottom-anchored
+           at the launcher, so drag the TOP up → grows taller (the bindResize `sh - dy` formula already does
+           drag-up=taller). Bottom stays pinned to the launcher. */
+        top: 3px;
         left: 50%;
         transform: translateX(-50%);
         width: 26px;
@@ -2856,8 +2862,10 @@
         ></span>
         <!-- ▼ TOP-CHROME BAR (Sage, 2026-07-04): grabber (drag region) + CHAT/DECK segmented switcher +
            premium accent-hairline seam. Switcher pushed to the very top (owner: «придвинуть кверху»). ▼ -->
-        <!-- minimal drag-handle grabber (NOT an avatar/name identity strip — owner-rejected) -->
-        <div class="grab" title="Drag"><span></span></div>
+        <!-- grabber REMOVED (owner «убрать сверху лишний элемент — горизонтальная полоска» 2026-07-06):
+             the popup is moved by dragging the top switcher plashka itself (cursor: grab on .modes), so the
+             separate grabber line is redundant. -->
+
         <!-- CHAT / DECK segmented switcher — modes of the ONE assistant, not an identity header. -->
         <div class="modes" role="tablist" aria-label="Assistant modes">
           <button class="modetab on" id="tabChat" role="tab" aria-selected="true" data-mode="chat">
@@ -2902,7 +2910,7 @@
               stroke-linejoin="round"
               aria-hidden="true"
             >
-              <polyline points="6 9 12 15 18 9"></polyline>
+              <line x1="6" y1="12" x2="18" y2="12"></line>
             </svg>
           </button>
         </div>
