@@ -1519,6 +1519,13 @@
         gap: 3px;
         width: auto;
         padding: 0 8px;
+        /* Deck counter = same pulse-badge as Important (owner 2026-07-07 «счётчик у звоночка тоже
+           визуализировать, по такому же принципу как Urgent») but BLUE (calm notifications) + a slower,
+           gentler pulse. */
+        --flame: var(--acc);
+      }
+      .modetab.tab-deck .ipulse {
+        animation-duration: 2.6s;
       }
       .modetab .cnt {
         font-size: 13px;
@@ -3080,7 +3087,11 @@
               <path d="M7 8V6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"></path>
               <circle class="rail-amber" cx="9.5" cy="14" r="1.7" stroke="none"></circle>
             </svg>
-            <span class="cnt" id="deckCount">1</span>
+            <span class="igoo" aria-hidden="true">
+              <span class="ipulse"></span>
+              <span class="idot"></span>
+              <span class="inum" id="deckCount">1</span>
+            </span>
           </button>
           <!-- IMPORTANT tab (owner 2026-07-07): urgent/burning items (stuck etc.) in RED, with the gooey
                liquid count badge (ref: Oleg Frolov «Notification Badge» — red metaball blob + white numeral). -->
