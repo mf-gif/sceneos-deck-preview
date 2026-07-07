@@ -1521,6 +1521,126 @@
         font-variant-numeric: tabular-nums;
         line-height: 1;
       }
+      /* IMPORTANT tab — active/hover = RED (alarm/«горящее»), not blue; the PFD plane-mark heats red too. */
+      .modetab.tab-important {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        width: auto;
+        padding: 0 9px 0 8px;
+      }
+      .modetab.tab-important:hover,
+      .modetab.tab-important.on {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.12);
+      }
+      .modetab.tab-important:hover .rail-amber,
+      .modetab.tab-important.on .rail-amber {
+        fill: #ef4444;
+      }
+      /* «горящий счётчик нотификаций» — gooey liquid badge (owner ref: Oleg Frolov «Notification Badge»):
+         red metaball blob (droplets gel through the #gooey filter) + bold white numeral, gentle liquid motion. */
+      .igoo {
+        position: relative;
+        width: 22px;
+        height: 22px;
+        display: inline-grid;
+        place-items: center;
+        flex: none;
+      }
+      .igoo-blobs {
+        position: absolute;
+        inset: -4px;
+        filter: url(#gooey);
+      }
+      .iblob,
+      .idrop {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background: #ef3b2c;
+        border-radius: 50%;
+      }
+      .iblob {
+        width: 18px;
+        height: 18px;
+        transform: translate(-50%, -50%);
+      }
+      .idrop {
+        width: 7px;
+        height: 7px;
+      }
+      .idrop.d1 {
+        animation: igoo1 2.6s ease-in-out infinite;
+      }
+      .idrop.d2 {
+        animation: igoo2 3.1s ease-in-out infinite;
+      }
+      .inum {
+        position: relative;
+        z-index: 2;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+      }
+      @keyframes igoo1 {
+        0%,
+        100% {
+          transform: translate(-10px, -3px) scale(1);
+        }
+        50% {
+          transform: translate(-7px, -9px) scale(0.65);
+        }
+      }
+      @keyframes igoo2 {
+        0%,
+        100% {
+          transform: translate(3px, 0) scale(0.85);
+        }
+        50% {
+          transform: translate(7px, -8px) scale(0.6);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .idrop {
+          animation: none;
+        }
+      }
+      /* Important pane rows — red-accented urgent items */
+      .imp-list {
+        padding-top: 64px;
+      }
+      .imp-row {
+        display: flex;
+        gap: 11px;
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .imp-dot {
+        flex: none;
+        width: 9px;
+        height: 9px;
+        margin-top: 5px;
+        border-radius: 50%;
+        background: #ef3b2c;
+        box-shadow: 0 0 0 4px rgba(239, 59, 44, 0.15);
+      }
+      .imp-hd {
+        font-size: 13px;
+        color: var(--soft);
+      }
+      .imp-hd b {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .imp-sub {
+        font-size: 12px;
+        color: var(--mut);
+        margin-top: 2px;
+        line-height: 1.4;
+      }
 
       /* PREMIUM SEAM under the switcher — the chat's top border. Canon top accent-hairline signature:
      2px, fades to transparent at both edges (blue→purple). Same on Chat and Deck. */
@@ -2969,6 +3089,60 @@
             </svg>
             <span class="cnt" id="deckCount">1</span>
           </button>
+          <!-- IMPORTANT tab (owner 2026-07-07): urgent/burning items (stuck etc.) in RED, with the gooey
+               liquid count badge (ref: Oleg Frolov «Notification Badge» — red metaball blob + white numeral). -->
+          <button
+            class="modetab tab-important"
+            id="tabImportant"
+            role="tab"
+            aria-selected="false"
+            data-mode="important"
+            title="Important"
+            aria-label="Important — 3 urgent"
+          >
+            <!-- our PFD (production cockpit) glyph as the Important base (owner 2026-07-07) -->
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M4.3 12h15.4"></path>
+              <path d="M12 3.4v1.7"></path>
+              <g class="rail-amber" stroke="none">
+                <path
+                  transform="translate(7.68 7.84) scale(0.36)"
+                  d="M12 2.7c-.85 0-1.4 1.2-1.4 3.1v3.5L3.9 13v1.8l6.7-1.85v3.75L8.7 18.05v1.45L12 20.4l3.3-.9v-1.45l-1.9-1.35v-3.75L20.1 14.8V13l-6.7-3.7V5.8c0-1.9-.55-3.1-1.4-3.1z"
+                ></path>
+              </g>
+            </svg>
+            <span class="igoo" aria-hidden="true">
+              <span class="igoo-blobs">
+                <span class="iblob"></span>
+                <span class="idrop d1"></span>
+                <span class="idrop d2"></span>
+              </span>
+              <span class="inum">3</span>
+            </span>
+          </button>
+          <!-- gooey metaball SVG filter (0-size, defs only) -->
+          <svg class="goo-defs" width="0" height="0" aria-hidden="true">
+            <defs>
+              <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blur" />
+                <feColorMatrix
+                  in="blur"
+                  mode="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -8"
+                  result="goo"
+                />
+                <feBlend in="SourceGraphic" in2="goo" />
+              </filter>
+            </defs>
+          </svg>
           <span class="modes-spacer"></span>
           <!-- aA text-size — two ROUND buttons of different sizes (owner 2026-07-07) -->
           <span class="ascale" title="Text size">
@@ -3222,6 +3396,42 @@
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IMPORTANT pane — burning/urgent items (stuck gens, overdue retakes, budget) in red.
+               Placeholder content; real feed = pending BE (Atlas/Drake), like the deck. -->
+          <div
+            class="pane"
+            id="importantPane"
+            role="tabpanel"
+            aria-labelledby="tabImportant"
+            hidden
+          >
+            <div class="deck imp-list">
+              <div class="imp-row">
+                <span class="imp-dot"></span>
+                <div>
+                  <div class="imp-hd"><b>Scene 4 · Rooftop</b> — generation STUCK 12m</div>
+                  <div class="imp-sub">
+                    3 takes stalled on the provider — needs a retry or a switch.
+                  </div>
+                </div>
+              </div>
+              <div class="imp-row">
+                <span class="imp-dot"></span>
+                <div>
+                  <div class="imp-hd"><b>North Wind</b> — retake overdue</div>
+                  <div class="imp-sub">Director asked for a redo 2h ago; nothing queued yet.</div>
+                </div>
+              </div>
+              <div class="imp-row">
+                <span class="imp-dot"></span>
+                <div>
+                  <div class="imp-hd"><b>Budget</b> — 92% of the Rooftop cap</div>
+                  <div class="imp-sub">One more full batch will exceed the scene budget.</div>
                 </div>
               </div>
             </div>
@@ -3936,14 +4146,17 @@
         // ──── ADDED (Sage): CHAT / DECK tab switch. The composer is a SIBLING of both panes, so it stays
         // pinned at the bottom on BOTH tabs — the user can dictate a command from the deck. ────
         function switchMode(mode) {
-          const chat = mode !== 'deck';
-          document.getElementById('chatPane').hidden = !chat;
-          document.getElementById('deckPane').hidden = chat;
-          document.getElementById('tabChat').classList.toggle('on', chat);
-          document.getElementById('tabDeck').classList.toggle('on', !chat);
-          document.getElementById('tabChat').setAttribute('aria-selected', chat);
-          document.getElementById('tabDeck').setAttribute('aria-selected', !chat);
-          if (chat) scrollEnd();
+          const panes = { chat: 'chatPane', deck: 'deckPane', important: 'importantPane' };
+          Object.entries(panes).forEach(([m, id]) => {
+            const p = document.getElementById(id);
+            if (p) p.hidden = m !== mode;
+          });
+          document.querySelectorAll('.modetab').forEach((t) => {
+            const on = t.dataset.mode === mode;
+            t.classList.toggle('on', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          if (mode === 'chat') scrollEnd();
         }
 
         // ──── wire it up ────
