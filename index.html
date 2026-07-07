@@ -1551,126 +1551,56 @@
       /* «горящий счётчик» — the badge looks like it's ON FIRE (owner «как будто горит»): a round blob at
          the base + flame tongues + embers rising and morphing through the #gooey metaball filter. Colour =
          --flame. White numeral on the blob. */
+      /* «горящий счётчик» → COMPACT clean attention PULSE (owner 2026-07-07 «не огонь, а другие эффекты
+         привлекающие внимание, но компактно»): a small round badge + a soft colour halo that pulses out and
+         fades (draws the eye, stays tiny). Colour = --flame (stuck=red / retake=amber). No crude metaball. */
       .igoo {
         position: relative;
-        width: 24px;
-        height: 26px;
+        width: 20px;
+        height: 20px;
+        display: inline-grid;
+        place-items: center;
         flex: none;
       }
-      .igoo-blobs {
+      .idot {
         position: absolute;
-        inset: -8px -3px 0;
-        filter: url(#gooey);
-      }
-      .iblob,
-      .iflame,
-      .iember {
-        position: absolute;
-        left: 50%;
+        inset: 0;
+        border-radius: 50%;
         background: var(--flame, #ef3b2c);
       }
-      .iblob {
-        bottom: 4px;
-        width: 18px;
-        height: 18px;
+      .ipulse {
+        position: absolute;
+        inset: 0;
         border-radius: 50%;
-        transform: translateX(-50%);
-      }
-      .iflame {
-        bottom: 15px;
-        width: 8px;
-        height: 12px;
-        border-radius: 50% 50% 45% 45% / 70% 70% 30% 30%;
-        transform-origin: 50% 100%;
-      }
-      .iflame.f1 {
-        --fx: -9px;
-        animation: flame 1.05s ease-in-out infinite;
-      }
-      .iflame.f2 {
-        --fx: 0px;
-        width: 9px;
-        height: 16px;
-        animation: flame 0.82s ease-in-out infinite 0.2s;
-      }
-      .iflame.f3 {
-        --fx: 8px;
-        animation: flame 1.22s ease-in-out infinite 0.4s;
-      }
-      .iember {
-        bottom: 20px;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-      }
-      .iember.e1 {
-        --fx: -7px;
-        animation: ember 1.7s ease-out infinite;
-      }
-      .iember.e2 {
-        --fx: 6px;
-        animation: ember 2s ease-out infinite 0.8s;
+        animation: ipulse 1.6s ease-out infinite;
       }
       .inum {
-        position: absolute;
-        left: 50%;
-        bottom: 6px;
-        transform: translateX(-50%);
+        position: relative;
         z-index: 2;
         color: #fff;
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 700;
         line-height: 1;
       }
-      @keyframes flame {
-        0%,
-        100% {
-          transform: translateX(calc(-50% + var(--fx))) scaleY(1) scaleX(1);
-        }
-        50% {
-          transform: translateX(calc(-50% + var(--fx))) scaleY(1.55) scaleX(0.78);
-        }
-      }
-      @keyframes ember {
+      @keyframes ipulse {
         0% {
-          transform: translate(calc(-50% + var(--fx)), 0) scale(1);
-          opacity: 0.85;
+          box-shadow: 0 0 0 0 color-mix(in srgb, var(--flame) 55%, transparent);
         }
+        70%,
         100% {
-          transform: translate(calc(-50% + var(--fx)), -15px) scale(0.25);
-          opacity: 0;
+          box-shadow: 0 0 0 8px color-mix(in srgb, var(--flame) 0%, transparent);
         }
       }
-      /* retake (no alarm) = WATER, not fire (owner «жёлтое переливающееся когда нет аларма»): hide the
-         flames/embers; the amber blob just morphs its shape calmly, like liquid shimmering. */
-      .tab-important.retake .iflame,
-      .tab-important.retake .iember {
-        display: none;
+      /* stuck = red, faster/urgent pulse; retake = amber, slower/calm */
+      .tab-important.stuck .ipulse {
+        animation-duration: 1.5s;
       }
-      .tab-important.retake .iblob {
-        animation: water 3.4s ease-in-out infinite;
-      }
-      @keyframes water {
-        0%,
-        100% {
-          border-radius: 46% 54% 52% 48% / 55% 48% 52% 45%;
-          transform: translateX(-50%) rotate(0deg);
-        }
-        33% {
-          border-radius: 54% 46% 45% 55% / 48% 55% 45% 52%;
-        }
-        66% {
-          border-radius: 48% 52% 55% 45% / 52% 46% 54% 48%;
-          transform: translateX(-50%) rotate(2deg);
-        }
+      .tab-important.retake .ipulse {
+        animation-duration: 2.8s;
       }
       @media (prefers-reduced-motion: reduce) {
-        .iflame,
-        .iember {
+        .ipulse {
           animation: none;
-        }
-        .iember {
-          opacity: 0;
         }
       }
       /* Important pane rows — red-accented urgent items */
@@ -3180,14 +3110,8 @@
               </g>
             </svg>
             <span class="igoo" aria-hidden="true">
-              <span class="igoo-blobs">
-                <span class="iblob"></span>
-                <span class="iflame f1"></span>
-                <span class="iflame f2"></span>
-                <span class="iflame f3"></span>
-                <span class="iember e1"></span>
-                <span class="iember e2"></span>
-              </span>
+              <span class="ipulse"></span>
+              <span class="idot"></span>
               <span class="inum">3</span>
             </span>
           </button>
@@ -4230,6 +4154,68 @@
           document
             .querySelectorAll('.modetab')
             .forEach((t) => t.addEventListener('click', () => switchMode(t.dataset.mode)));
+
+          // ADDED (Sage, owner 2026-07-07): DRAG-REORDER — the user can rearrange the tabs (Chat/Deck/
+          // Important) by dragging. A small move threshold tells a drag apart from a tab-click; the click
+          // that follows a real drag is swallowed (capture phase) so it doesn't also switch tabs.
+          (function () {
+            const bar = document.querySelector('.modes');
+            if (!bar) return;
+            let dragTab = null,
+              startX = 0,
+              moved = false;
+            bar.querySelectorAll('.modetab').forEach((tab) => {
+              tab.addEventListener('pointerdown', (e) => {
+                dragTab = tab;
+                startX = e.clientX;
+                moved = false;
+                try {
+                  tab.setPointerCapture(e.pointerId);
+                } catch (_) {}
+              });
+              tab.addEventListener('pointermove', (e) => {
+                if (dragTab !== tab) return;
+                if (!moved && Math.abs(e.clientX - startX) > 5) {
+                  moved = true;
+                  tab.style.opacity = '0.65';
+                  tab.style.cursor = 'grabbing';
+                }
+                if (!moved) return;
+                const tabs = [...bar.querySelectorAll('.modetab')];
+                const over = tabs.find((t) => {
+                  if (t === tab) return false;
+                  const r = t.getBoundingClientRect();
+                  return e.clientX >= r.left && e.clientX <= r.right;
+                });
+                if (over) {
+                  const idx = tabs.indexOf(tab),
+                    oidx = tabs.indexOf(over);
+                  if (idx < oidx) over.after(tab);
+                  else over.before(tab);
+                }
+              });
+              const end = () => {
+                if (dragTab === tab) {
+                  tab.style.opacity = '';
+                  tab.style.cursor = '';
+                  dragTab = null;
+                }
+              };
+              tab.addEventListener('pointerup', end);
+              tab.addEventListener('pointercancel', end);
+              tab.addEventListener(
+                'click',
+                (e) => {
+                  if (moved) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    moved = false;
+                  }
+                },
+                true,
+              );
+            });
+          })();
 
           // ADDED (Sage, owner 2026-07-04): deck compact rows — tap a row to expand/collapse ITS detail only
           // (progressive disclosure). Detail action buttons live outside .drow, so they never toggle the row.
