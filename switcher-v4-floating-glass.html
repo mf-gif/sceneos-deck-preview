@@ -1,0 +1,322 @@
+<!doctype html>
+<!--
+  Chat/Deck SWITCHER — V4: FLOATING GLASS (Sage, 2026-07-07).
+  Owner idea: «висящая над чатом плашка в полупрозрачном стиле как сейчас модно» — the switcher FLOATS
+  over the chat as a frosted-glass bar; the thread scrolls UNDER it (visible blurred through the glass),
+  so there is no divider / no «cut off» at all. iOS-26 floating-toolbar vibe.
+  Shown over a real thread so the backdrop-blur reads. Brand tokens from assistant-deck-modal-popup.html.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SceneOS — Switcher V4 floating glass</title>
+    <style>
+      :root {
+        --ink: #08080b;
+        --panel: #101015;
+        --panel2: #16161d;
+        --line: #23232c;
+        --line2: #2c2c38;
+        --mut: #8a8a99;
+        --soft: #b9b9c6;
+        --text: #e9e9f0;
+        --white: #fff;
+        --acc: #4d7dff;
+        --acc2: #6e5bff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(1000px 500px at 50% -10%, #14141c, var(--ink));
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px 60px;
+      }
+      h1 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--soft);
+        margin: 0 0 4px;
+      }
+      .sub {
+        color: var(--mut);
+        font-size: 12.5px;
+        margin: 0 0 28px;
+        max-width: 520px;
+        text-align: center;
+        line-height: 1.5;
+      }
+
+      /* the popup panel */
+      .pop {
+        position: relative;
+        width: 400px;
+        height: 620px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow:
+          0 0 0 1px rgba(110, 91, 255, 0.28),
+          0 40px 100px -24px rgba(0, 0, 0, 0.85);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── THE FLOATING GLASS SWITCHER — hovers over the thread ── */
+      .glassbar {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        z-index: 5;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 8px 0 6px;
+        border-radius: 14px;
+        /* frosted glass: translucent panel + blur the thread behind + a lit top edge */
+        background: rgba(20, 20, 28, 0.55);
+        backdrop-filter: blur(22px) saturate(1.5);
+        -webkit-backdrop-filter: blur(22px) saturate(1.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.06) inset,
+          0 8px 24px -8px rgba(0, 0, 0, 0.6);
+        cursor: grab;
+      }
+      .tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 30px;
+        padding: 0 13px;
+        border: 0;
+        background: transparent;
+        color: var(--soft);
+        font: inherit;
+        font-size: 12.5px;
+        font-weight: 600;
+        border-radius: 9px;
+        cursor: pointer;
+      }
+      .tab.on {
+        color: var(--white);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1.5px solid var(--mut);
+      }
+      .tab.on .dot {
+        background: var(--acc);
+        border-color: var(--acc);
+        box-shadow: 0 0 0 3px rgba(77, 125, 255, 0.25);
+      }
+      .cnt {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--acc);
+        border-radius: 999px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 5px;
+        display: inline-grid;
+        place-items: center;
+      }
+      .spacer {
+        margin-left: auto;
+      }
+      .ascale {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 11px;
+        color: var(--mut);
+        font-size: 12px;
+        padding: 0 4px;
+      }
+      .ascale .lg {
+        font-size: 15px;
+      }
+      .mincol {
+        display: inline-grid;
+        place-items: center;
+        width: 26px;
+        height: 26px;
+        border: 0;
+        background: transparent;
+        color: var(--mut);
+        cursor: pointer;
+        border-radius: 8px;
+      }
+      .mincol:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      /* ── the thread — runs to the TOP of the panel, so the glass bar floats OVER the first rows ── */
+      .thread {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 16px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      /* first block sits UNDER the glass — a scroll-cue that content lives behind the bar */
+      .thread .under {
+        margin-top: 4px;
+        opacity: 0.9;
+      }
+      .m {
+        display: flex;
+        gap: 10px;
+      }
+      .av {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--panel2);
+        border: 1px solid var(--line2);
+        flex: none;
+      }
+      .m.me {
+        flex-direction: row-reverse;
+      }
+      .bub {
+        max-width: 74%;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--soft);
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        padding: 9px 12px;
+        border-radius: 13px;
+      }
+      .m.me .bub {
+        color: var(--text);
+        background: linear-gradient(180deg, #23305a, #1c2547);
+        border-color: #2f3d6e;
+      }
+      .nm {
+        font-size: 11px;
+        color: var(--mut);
+        margin: 0 0 3px;
+      }
+
+      /* composer */
+      .composer {
+        flex: none;
+        border-top: 1px solid var(--line);
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .ci {
+        flex: 1;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        color: var(--mut);
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        font-size: 13px;
+      }
+      .mic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--panel2);
+        border: 1px solid var(--line2);
+        flex: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>V4 · Floating glass switcher</h1>
+    <p class="sub">
+      The switcher floats over the thread as a frosted-glass bar — chat scrolls under it (blurred
+      through the glass), so there's no divider and no «cut off». Drag the bar to move; minus =
+      collapse.
+    </p>
+
+    <div class="pop">
+      <!-- floating glass switcher — hovers OVER the thread -->
+      <div class="glassbar">
+        <button class="tab on"><span class="dot"></span>Chat</button>
+        <button class="tab"><span class="dot"></span>Deck <span class="cnt">1</span></button>
+        <span class="spacer"></span>
+        <span class="ascale">A<span class="lg">A</span></span>
+        <button class="mincol" title="Свернуть" aria-label="Свернуть чат">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+          >
+            <line x1="6" y1="12" x2="18" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- thread runs to the top; first rows live UNDER the glass -->
+      <div class="thread">
+        <div class="m under">
+          <span class="av"></span>
+          <div>
+            <p class="nm">Jason · Director</p>
+            <div class="bub">
+              Morning — 3 takes from last night need your eye before the review call.
+            </div>
+          </div>
+        </div>
+        <div class="m me">
+          <div class="bub">Show me the Rooftop hero-shot first.</div>
+        </div>
+        <div class="m">
+          <span class="av"></span>
+          <div>
+            <p class="nm">Jason</p>
+            <div class="bub">
+              Here it is — Take 4. Lighting matches the board; want me to mark it approved?
+            </div>
+          </div>
+        </div>
+        <div class="m me">
+          <div class="bub">Yes, approve it and assign the series to Yura.</div>
+        </div>
+        <div class="m">
+          <span class="av"></span>
+          <div>
+            <p class="nm">Jason</p>
+            <div class="bub">
+              Done — approved Take 4 and queued the assignment for your confirm.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="composer">
+        <div class="ci">Message Jason…</div>
+        <span class="mic"></span>
+      </div>
+    </div>
+  </body>
+</html>
