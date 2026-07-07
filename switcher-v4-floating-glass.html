@@ -96,32 +96,27 @@
       .tab {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 7px;
         height: 30px;
-        padding: 0 13px;
+        padding: 0 14px;
         border: 0;
         background: transparent;
-        color: var(--soft);
+        color: var(--mut);
         font: inherit;
         font-size: 12.5px;
         font-weight: 600;
         border-radius: 9px;
         cursor: pointer;
+        transition: color 0.14s;
       }
+      .tab:hover {
+        color: var(--soft);
+      }
+      /* active = a WHISPER of a highlight (owner «лёгкое не кричащее выделение», dots removed): brighter
+         text + a soft low-opacity fill. No dot, no loud accent — the fill just barely lifts the active tab. */
       .tab.on {
         color: var(--white);
-        background: rgba(255, 255, 255, 0.1);
-      }
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        border: 1.5px solid var(--mut);
-      }
-      .tab.on .dot {
-        background: var(--acc);
-        border-color: var(--acc);
-        box-shadow: 0 0 0 3px rgba(77, 125, 255, 0.25);
+        background: rgba(255, 255, 255, 0.06);
       }
       .cnt {
         font-size: 10.5px;
@@ -257,8 +252,8 @@
     <div class="pop">
       <!-- floating glass switcher — hovers OVER the thread -->
       <div class="glassbar">
-        <button class="tab on"><span class="dot"></span>Chat</button>
-        <button class="tab"><span class="dot"></span>Deck <span class="cnt">1</span></button>
+        <button class="tab on">Chat</button>
+        <button class="tab">Deck <span class="cnt">1</span></button>
         <span class="spacer"></span>
         <span class="ascale">A<span class="lg">A</span></span>
         <button class="mincol" title="Свернуть" aria-label="Свернуть чат">
