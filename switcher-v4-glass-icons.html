@@ -1,16 +1,18 @@
 <!doctype html>
 <!--
-  Chat/Deck SWITCHER — V4-ICONS: floating glass + ICON tabs (Sage, 2026-07-07).
-  Owner: «отказался бы от текста, сделал бы симпатичными иконками — тогда супер как мобайл». So the
-  floating-glass bar (V4b lift) carries icon-only tabs: Chat = speech bubble, Deck = stacked cards, with
-  a small unread badge on the deck icon (mobile tab-bar style). Active = the same quiet soft-fill, no text.
-  Glass float still pending Olive's brand consult. Brand tokens from assistant-deck-modal-popup.html.
+  Chat/Deck SWITCHER — V4-ICONS r2: floating glass + BIGGER rail-style icon tabs (Sage, 2026-07-07).
+  Owner feedback on r1: (9) buttons too small → bigger touch targets. (10) icons «в нашем стиле, как в
+  левом баре» (nav-rail RAIL_ICONS: Lucide base + .rail-amber accent) — monochrome at rest → BLUE stroke
+  + AMBER accent on hover AND select (owner «комбинация синего и жёлтых»). (11) collapse button «не понятно
+  что это кнопка» → give it a real button container. (12) aA font-size «колхозно/2020» → two ROUND buttons
+  of different sizes (2026). Chat = the canon `assistant` rail glyph (bubble + amber dots); Deck = stacked
+  cards + amber accent. Glass float still pending Olive. Tokens from assistant-deck-modal-popup.html.
 -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SceneOS — Switcher V4 glass + icons</title>
+    <title>SceneOS — Switcher V4 glass + rail icons</title>
     <style>
       :root {
         --ink: #08080b;
@@ -24,6 +26,7 @@
         --white: #fff;
         --acc: #4d7dff;
         --acc2: #6e5bff;
+        --star: #fbbf24;
       }
       * {
         box-sizing: border-box;
@@ -49,7 +52,7 @@
         color: var(--mut);
         font-size: 12.5px;
         margin: 0 0 28px;
-        max-width: 520px;
+        max-width: 540px;
         text-align: center;
         line-height: 1.5;
       }
@@ -68,19 +71,19 @@
         flex-direction: column;
       }
 
-      /* floating glass bar (V4b lift) */
+      /* floating glass bar (V4b lift) — height grown for the bigger buttons */
       .glassbar {
         position: absolute;
         top: 10px;
         left: 10px;
         right: 10px;
         z-index: 5;
-        height: 44px;
+        height: 54px;
         display: flex;
         align-items: center;
-        gap: 4px;
-        padding: 0 8px 0 7px;
-        border-radius: 14px;
+        gap: 6px;
+        padding: 0 9px 0 8px;
+        border-radius: 15px;
         background: rgba(30, 30, 42, 0.62);
         backdrop-filter: blur(24px) saturate(1.7);
         -webkit-backdrop-filter: blur(24px) saturate(1.7);
@@ -92,77 +95,127 @@
         cursor: grab;
       }
 
-      /* ICON tabs — no text (owner «супер как мобайл») */
+      /* ICON tabs — nav-rail language, BIGGER (owner «крупнее кнопки») */
       .itab {
         position: relative;
         display: inline-grid;
         place-items: center;
-        width: 38px;
-        height: 32px;
+        width: 48px;
+        height: 40px;
         border: 0;
         background: transparent;
         color: var(--mut);
-        border-radius: 9px;
+        border-radius: 12px;
         cursor: pointer;
-        transition: color 0.14s;
-      }
-      .itab:hover {
-        color: var(--soft);
-      }
-      /* active = the quiet soft fill + brighter icon (no dot, no shout) */
-      .itab.on {
-        color: var(--white);
-        background: rgba(255, 255, 255, 0.07);
+        transition:
+          color 0.14s,
+          background 0.14s;
       }
       .itab svg {
-        width: 19px;
-        height: 19px;
+        width: 25px;
+        height: 25px;
       }
-      /* unread badge on the deck icon — the ratified FAB blue pill, corner-mounted (mobile tab-badge) */
+      /* rail-icon rule (globals.css nav canon): .rail-amber = currentColor at rest → #fbbf24 on hover/active.
+         Owner «когда наводишь/выбираешь — цветные, комбинация синего и жёлтых»: stroke → --acc blue, accent
+         → --star amber, on BOTH hover and select. */
+      .itab .rail-amber {
+        fill: currentColor;
+      }
+      .itab:hover {
+        color: var(--acc);
+        background: rgba(77, 125, 255, 0.1);
+      }
+      .itab:hover .rail-amber {
+        fill: var(--star);
+      }
+      .itab.on {
+        color: var(--acc);
+        background: rgba(77, 125, 255, 0.15);
+      }
+      .itab.on .rail-amber {
+        fill: var(--star);
+      }
+      /* unread badge on the deck icon — ratified FAB blue pill, corner-mounted (mobile tab-badge) */
       .badge {
         position: absolute;
-        top: 1px;
-        right: 1px;
-        min-width: 15px;
-        height: 15px;
+        top: 0;
+        right: 2px;
+        min-width: 16px;
+        height: 16px;
         padding: 0 4px;
         border-radius: 999px;
         background: var(--acc);
         color: #fff;
-        font-size: 9.5px;
+        font-size: 10px;
         font-weight: 700;
         display: grid;
         place-items: center;
-        box-shadow: 0 0 0 2px rgba(30, 30, 42, 0.9);
+        box-shadow: 0 0 0 2px rgba(30, 30, 42, 0.95);
       }
+
       .spacer {
         margin-left: auto;
       }
+
+      /* aA font-size — TWO ROUND buttons of different sizes (owner «круглые а-ля кнопки с разным размером»,
+         2026 not 2020). Small circle = smaller text, big circle = bigger. */
       .ascale {
         display: inline-flex;
-        align-items: baseline;
-        gap: 11px;
-        color: var(--mut);
-        font-size: 12px;
-        padding: 0 4px;
+        align-items: center;
+        gap: 5px;
       }
-      .ascale .lg {
+      .asz {
+        display: inline-grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--soft);
+        border-radius: 50%;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 600;
+        line-height: 1;
+        transition: 0.14s;
+      }
+      .asz:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.13);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+      .asz.sm {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+      }
+      .asz.lg {
+        width: 30px;
+        height: 30px;
         font-size: 15px;
       }
+
+      /* COLLAPSE — now a REAL button container (owner «не понятно что это кнопка»): rounded chip w/ border
+         + soft fill, so it reads as tappable. Minus glyph inside. */
       .mincol {
         display: inline-grid;
         place-items: center;
-        width: 26px;
-        height: 26px;
-        border: 0;
-        background: transparent;
-        color: var(--mut);
+        width: 32px;
+        height: 32px;
+        margin-left: 3px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--soft);
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 10px;
+        transition: 0.14s;
       }
       .mincol:hover {
         color: #fff;
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.13);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+      .mincol svg {
+        width: 17px;
+        height: 17px;
       }
 
       /* thread */
@@ -175,7 +228,7 @@
         gap: 15px;
       }
       .thread .under {
-        margin-top: 4px;
+        margin-top: 6px;
         opacity: 0.9;
       }
       .m {
@@ -244,15 +297,16 @@
     </style>
   </head>
   <body>
-    <h1>V4 · Floating glass + ICON tabs</h1>
+    <h1>V4 · Floating glass + rail-style icon tabs</h1>
     <p class="sub">
-      No text — Chat = bubble, Deck = stacked cards, unread badge on the deck icon (mobile tab-bar).
-      Floating glass float still pending Olive's brand pass.
+      Bigger icon tabs in our nav-rail language — monochrome at rest, blue stroke + amber accent on
+      hover AND select. Round aA buttons; the collapse control is now a clear button. Glass float
+      pending Olive.
     </p>
 
     <div class="pop">
       <div class="glassbar">
-        <!-- Chat = speech bubble -->
+        <!-- Chat = the canon `assistant` rail glyph (bubble + 3 amber dots) -->
         <button class="itab on" title="Chat" aria-label="Chat">
           <svg
             viewBox="0 0 24 24"
@@ -262,12 +316,13 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <path
-              d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.6A8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"
-            ></path>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <circle class="rail-amber" cx="8.5" cy="10" r="1" stroke="none"></circle>
+            <circle class="rail-amber" cx="12" cy="10" r="1" stroke="none"></circle>
+            <circle class="rail-amber" cx="15.5" cy="10" r="1" stroke="none"></circle>
           </svg>
         </button>
-        <!-- Deck = stacked cards + unread badge -->
+        <!-- Deck = stacked cards + amber accent, rail language -->
         <button class="itab" title="Deck" aria-label="Deck — 1 unread">
           <svg
             viewBox="0 0 24 24"
@@ -277,21 +332,28 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <rect x="3" y="8" width="14" height="12" rx="2"></rect>
-            <path d="M7 8V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"></path>
+            <rect x="3" y="8" width="13" height="12" rx="2"></rect>
+            <path d="M7 8V6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"></path>
+            <circle class="rail-amber" cx="9.5" cy="14" r="1.7" stroke="none"></circle>
           </svg>
           <span class="badge">1</span>
         </button>
+
         <span class="spacer"></span>
-        <span class="ascale">A<span class="lg">A</span></span>
+
+        <!-- aA — two round buttons, different sizes -->
+        <span class="ascale">
+          <button class="asz sm" title="Меньше текст" aria-label="Decrease text size">A</button>
+          <button class="asz lg" title="Больше текст" aria-label="Increase text size">A</button>
+        </span>
+
+        <!-- collapse — a clear button now -->
         <button class="mincol" title="Свернуть" aria-label="Свернуть чат">
           <svg
-            width="15"
-            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2.2"
+            stroke-width="2.4"
             stroke-linecap="round"
           >
             <line x1="6" y1="12" x2="18" y2="12"></line>
