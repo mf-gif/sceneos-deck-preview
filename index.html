@@ -96,12 +96,29 @@
            padding-top is part of the scroll area, so scrolling passes content behind the translucent bar. */
         padding-top: 64px;
       }
-      .thread::-webkit-scrollbar {
-        width: 8px;
+      /* our signature THIN scrollbar (owner 2026-07-07 «наша фирменная тонкая полоска, не дефолтный»):
+         4px rail, translucent pill thumb, transparent track; brightens on hover. Firefox via thin. */
+      .thread::-webkit-scrollbar,
+      .deck::-webkit-scrollbar {
+        width: 4px;
       }
-      .thread::-webkit-scrollbar-thumb {
-        background: #23232c;
-        border-radius: 9px;
+      .thread::-webkit-scrollbar-track,
+      .deck::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .thread::-webkit-scrollbar-thumb,
+      .deck::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.13);
+        border-radius: 999px;
+      }
+      .thread::-webkit-scrollbar-thumb:hover,
+      .deck::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
+      .thread,
+      .deck {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
       }
 
       /* message row — avatar 36px round · name + AI-chip + ts · frameless body (canon grammar) */
@@ -1486,17 +1503,19 @@
       .modetab.on .rail-amber {
         fill: #fbbf24;
       }
-      /* Deck tab carries the count INLINE right of the icon (owner «справа как часть иконки, крупнее») */
-      .modetab.deck {
+      /* Deck tab — count INLINE right of the icon but kept COMPACT (owner 2026-07-07 «таб кардинально
+         большой, иконка мелкая»): snug count, tight padding → Deck stays close in size to the icon-only
+         Chat tab, not a wide bar. */
+      .modetab.tab-deck {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 7px;
+        gap: 3px;
         width: auto;
-        padding: 0 13px 0 11px;
+        padding: 0 8px;
       }
       .modetab .cnt {
-        font-size: 15.5px;
+        font-size: 13px;
         font-weight: 700;
         color: var(--acc);
         font-variant-numeric: tabular-nums;
@@ -1539,12 +1558,13 @@
         flex-direction: column;
         gap: 11px;
       }
+      /* (deck scrollbar folded into the signature thin scrollbar rule up top — kept thin here too) */
       .deck::-webkit-scrollbar {
-        width: 8px;
+        width: 4px;
       }
       .deck::-webkit-scrollbar-thumb {
-        background: #23232c;
-        border-radius: 9px;
+        background: rgba(255, 255, 255, 0.13);
+        border-radius: 999px;
       }
       /* groomer line — one calm summary (no "!", calm not amber) */
       .groom {
@@ -2927,7 +2947,7 @@
             </svg>
           </button>
           <button
-            class="modetab deck"
+            class="modetab tab-deck"
             id="tabDeck"
             role="tab"
             aria-selected="false"
