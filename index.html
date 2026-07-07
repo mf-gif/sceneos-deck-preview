@@ -92,6 +92,9 @@
       .v-popup .thread,
       .v-popup .deck {
         box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+        /* content starts BELOW the floating glass switcher (top:10 + h:54 ≈ 64) and scrolls UNDER it —
+           padding-top is part of the scroll area, so scrolling passes content behind the translucent bar. */
+        padding-top: 64px;
       }
       .thread::-webkit-scrollbar {
         width: 8px;
@@ -1415,75 +1418,89 @@
       /* CHAT / DECK switcher — now the modal's TOP-CHROME bar (owner 2026-07-04: «придвинуть кверху»).
      Segmented toggle reusing the Access-toggle idiom: active segment = panel bg + soft shadow +
      a FILLED lit accent-dot; inactive = flat + hollow muted dot. NOT an identity/name header. */
+      /* FLOATING GLASS SWITCHER (owner-directed 2026-07-07, Olive brand recipe): the Chat/Deck bar HOVERS
+         over the thread — absolute so the thread scrolls UNDER it, no divider. On dark, glass floats by being
+         LIGHTER than the panel (Olive): lighter+denser fill, low saturate, asymmetric light-edge (top .22 /
+         sides .07), neutral shadow + contact, NO accent bloom (switcher = secondary chrome). */
       .modes {
-        flex: none;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        z-index: 6;
+        height: 54px;
         display: flex;
         align-items: center;
-        gap: 5px;
-        padding: 1px 12px 5px;
-        /* the top plashka IS the move handle now (grabber removed, owner 2026-07-06) — empty bar space
-           reads as draggable; the tab/aA/collapse buttons override with cursor: pointer. */
+        gap: 6px;
+        padding: 0 9px 0 10px;
+        border-radius: 16px;
+        background: rgba(34, 34, 44, 0.74);
+        backdrop-filter: blur(22px) saturate(1.25);
+        -webkit-backdrop-filter: blur(22px) saturate(1.25);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.22),
+          0 8px 28px rgba(0, 0, 0, 0.5),
+          0 2px 6px rgba(0, 0, 0, 0.4);
         cursor: grab;
       }
+      .modes-spacer {
+        margin-left: auto;
+      }
+      /* ICON tab — nav-rail language (Lucide + .rail-amber): monochrome at rest → BLUE stroke + AMBER accent
+         on hover AND select (owner «комбинация синего и жёлтых, как в левом баре»). Bigger touch targets. */
       .modetab {
         position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        height: 32px;
-        padding: 0 13px;
+        display: inline-grid;
+        place-items: center;
+        width: 48px;
+        height: 40px;
         border: 0;
         background: transparent;
         color: var(--mut);
-        font-family: inherit;
-        font-size: 12.5px;
-        font-weight: 600;
-        letter-spacing: 0.01em;
+        border-radius: 12px;
         cursor: pointer;
-        border-radius: 9px;
-        transition: 0.12s;
+        transition:
+          color 0.14s,
+          background 0.14s;
+      }
+      .modetab svg {
+        width: 25px;
+        height: 25px;
+        display: block;
+      }
+      .modetab .rail-amber {
+        fill: currentColor;
       }
       .modetab:hover {
-        color: var(--soft);
+        color: var(--acc);
+        background: rgba(77, 125, 255, 0.1);
       }
-      /* ACTIVE segment = panel «volume» (bg + soft shadow), reused from the Access-toggle idiom */
+      .modetab:hover .rail-amber {
+        fill: #fbbf24;
+      }
       .modetab.on {
-        color: var(--white);
-        background: var(--panel2);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+        color: var(--acc);
+        background: rgba(77, 125, 255, 0.15);
       }
-      /* segment DOT — NAV-SELECTION accent (not a status token): active = filled --acc with lit ring;
-     inactive = hollow/muted, no ring. Distinct from the small deck status-dots on the cards. */
-      .modetab .seg-dot {
-        width: 8px;
-        height: 8px;
-        flex: none;
-        border-radius: 50%;
-        background: transparent;
-        border: 1.5px solid var(--mut);
-        transition: 0.12s;
+      .modetab.on .rail-amber {
+        fill: #fbbf24;
       }
-      .modetab.on .seg-dot {
-        background: var(--acc);
-        border-color: var(--acc);
-        box-shadow: 0 0 0 3px rgba(77, 125, 255, 0.22);
+      /* Deck tab carries the count INLINE right of the icon (owner «справа как часть иконки, крупнее») */
+      .modetab.deck {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        width: auto;
+        padding: 0 13px 0 11px;
       }
-      /* unread count on the DECK tab — SAME language as the launcher FAB unread pill (owner 2026-07-06:
-         «в том же стиле что и индикатор на бабле с чатом»): solid --acc blue fill + white numeral, not a
-         translucent tint. Mirrors globals.css `.asst-fab .fab-dot.has-count` (bg #4d7dff, #fff). Tab-inline
-         so a touch smaller (16px) than the 20px FAB pill, same treatment. */
       .modetab .cnt {
-        font-size: 11px;
+        font-size: 15.5px;
         font-weight: 700;
-        color: #fff;
-        background: #4d7dff;
-        border-radius: 999px;
-        min-width: 16px;
-        height: 16px;
-        padding: 0 5px;
-        display: inline-grid;
-        place-items: center;
+        color: var(--acc);
         font-variant-numeric: tabular-nums;
+        line-height: 1;
       }
 
       /* PREMIUM SEAM under the switcher — the chat's top border. Canon top accent-hairline signature:
@@ -2231,27 +2248,31 @@
         font+avatar (avatar ~2.4×, per-step from the array — NOT a fixed ratio). Sizes the CHAT
         CONTENT (body/name/timestamps/avatar/composer/table cells), NOT the popup frame. */
       .ascale {
-        margin-left: auto;
         display: inline-flex;
-        align-items: baseline;
-        gap: 12px;
-        border-left: 1px solid var(--line);
-        padding-left: 12px;
+        align-items: center;
+        gap: 5px;
         color: var(--mut);
         align-self: center;
       }
+      /* aA — two ROUND buttons of different sizes (owner 2026-07-07 «круглые кнопки с разным размером», 2026) */
       .asbtn {
-        border: 0;
-        background: transparent;
-        color: inherit;
+        display: inline-grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--soft);
         cursor: pointer;
         line-height: 1;
         padding: 0;
         font-family: inherit;
-        transition: color 0.12s;
+        font-weight: 600;
+        border-radius: 50%;
+        transition: 0.14s;
       }
       .asbtn:hover:not(:disabled) {
         color: #fff;
+        background: rgba(255, 255, 255, 0.13);
+        border-color: rgba(255, 255, 255, 0.22);
       }
       .asbtn:disabled {
         cursor: not-allowed;
@@ -2260,30 +2281,41 @@
       /* collapse/minimize control — quiet, in the same restrained language as the aA .asbtn cluster;
          sits at the far top-right corner (window-minimize convention). Hover lifts to white on a soft
          panel wash. */
+      /* collapse — a CLEAR, compact button (owner «не понятно что это кнопка» + «компактнее»): bordered
+         chip so it reads as tappable; hover lifts. */
       .mincol {
         margin-left: 4px;
         display: inline-grid;
         place-items: center;
-        width: 24px;
-        height: 24px;
-        border: 0;
-        background: transparent;
-        color: var(--mut);
+        width: 28px;
+        height: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--soft);
         cursor: pointer;
-        border-radius: 7px;
-        transition: 0.12s;
+        border-radius: 9px;
+        transition: 0.14s;
         align-self: center;
+      }
+      .mincol svg {
+        width: 16px;
+        height: 16px;
+        display: block;
       }
       .mincol:hover {
         color: #fff;
-        background: var(--panel2);
+        background: rgba(255, 255, 255, 0.13);
+        border-color: rgba(255, 255, 255, 0.22);
       }
       .as-sm {
-        font-size: 12px;
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
       }
       .as-lg {
-        font-size: 18px;
-        font-weight: 500;
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
       }
 
       /* aA scale application — drives the chat CONTENT size off Avocado's model (font + avatar; the
@@ -2866,17 +2898,60 @@
              the popup is moved by dragging the top switcher plashka itself (cursor: grab on .modes), so the
              separate grabber line is redundant. -->
 
-        <!-- CHAT / DECK segmented switcher — modes of the ONE assistant, not an identity header. -->
+        <!-- FLOATING GLASS SWITCHER (Sage, 2026-07-07, owner-directed): the Chat/Deck bar HOVERS over the
+             thread as a frosted-glass plashka (Olive brand recipe) — the thread scrolls UNDER it, no divider.
+             Icon tabs (rail language: blue stroke + amber accent on hover/select), round aA, clear collapse.
+             Buttons keep their ids / data-mode / roles so the existing tab-switch JS is unchanged. -->
         <div class="modes" role="tablist" aria-label="Assistant modes">
-          <button class="modetab on" id="tabChat" role="tab" aria-selected="true" data-mode="chat">
-            <span class="seg-dot"></span>Chat
+          <button
+            class="modetab on"
+            id="tabChat"
+            role="tab"
+            aria-selected="true"
+            data-mode="chat"
+            title="Chat"
+            aria-label="Chat"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <circle class="rail-amber" cx="8.5" cy="10" r="1" stroke="none"></circle>
+              <circle class="rail-amber" cx="12" cy="10" r="1" stroke="none"></circle>
+              <circle class="rail-amber" cx="15.5" cy="10" r="1" stroke="none"></circle>
+            </svg>
           </button>
-          <button class="modetab" id="tabDeck" role="tab" aria-selected="false" data-mode="deck">
-            <span class="seg-dot"></span>Deck <span class="cnt" id="deckCount">1</span>
+          <button
+            class="modetab deck"
+            id="tabDeck"
+            role="tab"
+            aria-selected="false"
+            data-mode="deck"
+            title="Deck"
+            aria-label="Deck — 1 unread"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="8" width="13" height="12" rx="2"></rect>
+              <path d="M7 8V6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"></path>
+              <circle class="rail-amber" cx="9.5" cy="14" r="1.7" stroke="none"></circle>
+            </svg>
+            <span class="cnt" id="deckCount">1</span>
           </button>
-          <!-- (c) A/A text-size control (Avocado canon, gen-screen.tsx:2664-2691 — mounted 1:1):
-             quiet two-«A» cluster, small A steps down / big A steps up, disabled at the edges. -->
-          <span class="ascale" title="Text size — chat &amp; prompt">
+          <span class="modes-spacer"></span>
+          <!-- aA text-size — two ROUND buttons of different sizes (owner 2026-07-07) -->
+          <span class="ascale" title="Text size">
             <button
               class="asbtn as-sm"
               id="asDown"
@@ -2894,14 +2969,9 @@
               A
             </button>
           </span>
-          <!-- (d) COLLAPSE — native minimize affordance (owner «нам надо сделать элемент нативно
-             воспринимаемый — чтобы свернуть чат» 2026-07-06): a quiet chevron-down at the top-right
-             corner. The popup is anchored ABOVE the launcher, so down = collapse toward the launcher.
-             Click the launcher to bring it back. -->
+          <!-- collapse — a clear button -->
           <button class="mincol" id="minBtn" aria-label="Свернуть чат" title="Свернуть">
             <svg
-              width="15"
-              height="15"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -2914,8 +2984,6 @@
             </svg>
           </button>
         </div>
-        <!-- premium seam — accent-hairline under the switcher (same on Chat and Deck) -->
-        <div class="seam"></div>
 
         <div class="chat">
           <!-- CHAT pane = HER thread, UNCHANGED (frameless column, injected by her JS). -->
