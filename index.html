@@ -1478,7 +1478,9 @@
         height: 40px;
         border: 0;
         background: transparent;
-        color: var(--mut);
+        /* icons BLUE + colourful ALWAYS (owner 2026-07-07 «сделал бы их синими и цветными сразу»), not muted
+           at rest; hover/active just add a soft bg + slightly brighter. */
+        color: var(--acc);
         border-radius: 12px;
         cursor: pointer;
         transition:
@@ -1491,11 +1493,11 @@
         display: block;
       }
       .modetab .rail-amber {
-        fill: currentColor;
+        fill: #fbbf24;
       }
       .modetab:hover {
         color: var(--acc);
-        background: rgba(77, 125, 255, 0.1);
+        background: rgba(77, 125, 255, 0.12);
       }
       .modetab:hover .rail-amber {
         fill: #fbbf24;
@@ -1545,8 +1547,10 @@
       }
       .modetab.tab-important:hover,
       .modetab.tab-important.on {
-        color: var(--soft);
-        background: color-mix(in srgb, var(--flame) 16%, transparent);
+        /* PFD icon stays BLUE like the others (owner 2026-07-07 «при наведении PFD должна быть синей»);
+           the status colour lives in the badge + a faint bg tint. */
+        color: var(--acc);
+        background: color-mix(in srgb, var(--flame) 13%, transparent);
       }
       /* «горящий счётчик» — the badge looks like it's ON FIRE (owner «как будто горит»): a round blob at
          the base + flame tongues + embers rising and morphing through the #gooey metaball filter. Colour =
@@ -3047,10 +3051,9 @@
             title="Chat"
             aria-label="Chat"
           >
-            <!-- chat icon adapted from owner ref (2026-07-07): a FILLED rounded speech bubble (app-icon
-                 idea) in our accent — kept the idea, our style. fill=currentColor → muted at rest, --acc on
-                 select. (Filled vs the outline rail language = a brand call for Olive to harmonise.) -->
-            <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <!-- chat icon (owner ref 2026-07-07): a FILLED rounded speech bubble with our brand blue→purple
+                 GRADIENT (app-icon depth, «интереснее»), always vibrant. -->
+            <svg viewBox="0 0 24 24" fill="url(#chatGrad)" stroke="none">
               <path
                 d="M12 3.6c-4.8 0-8.7 3.1-8.7 6.9 0 2.1 1.2 4 3.2 5.3-.2 1.1-.9 2.2-1.6 3-.3.3-.1.8.3.78 1.7-.1 3.1-.63 4.1-1.35.85.2 1.75.37 2.7.37 4.8 0 8.7-3.1 8.7-6.9S16.8 3.6 12 3.6z"
               ></path>
@@ -3128,6 +3131,11 @@
                 />
                 <feBlend in="SourceGraphic" in2="goo" />
               </filter>
+              <!-- brand blue→purple gradient for the chat bubble (owner «интереснее, как в референсе») -->
+              <linearGradient id="chatGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#4d8bff" />
+                <stop offset="1" stop-color="#7b5bff" />
+              </linearGradient>
             </defs>
           </svg>
           <span class="modes-spacer"></span>
