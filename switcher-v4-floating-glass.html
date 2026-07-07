@@ -83,14 +83,18 @@
         gap: 6px;
         padding: 0 8px 0 6px;
         border-radius: 14px;
-        /* frosted glass: translucent panel + blur the thread behind + a lit top edge */
-        background: rgba(20, 20, 28, 0.55);
-        backdrop-filter: blur(22px) saturate(1.5);
-        -webkit-backdrop-filter: blur(22px) saturate(1.5);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        /* V4b — FLOAT harder without going heavy (owner «теряется… должна висеть, лёгкой но заметной»,
+           dark-on-dark). Slightly lighter+more opaque fill so it's present; a brighter top light-edge that
+           catches light (reads as glass); a deeper drop shadow to lift it OFF the thread; a whisper of
+           accent bloom so it floats on the dark canvas (on-brand blue, kept low). Still translucent + blur. */
+        background: rgba(30, 30, 42, 0.62);
+        backdrop-filter: blur(24px) saturate(1.7);
+        -webkit-backdrop-filter: blur(24px) saturate(1.7);
+        border: 1px solid rgba(255, 255, 255, 0.13);
         box-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.06) inset,
-          0 8px 24px -8px rgba(0, 0, 0, 0.6);
+          0 1px 0 rgba(255, 255, 255, 0.14) inset,
+          0 14px 34px -12px rgba(0, 0, 0, 0.78),
+          0 4px 22px -8px rgba(77, 125, 255, 0.16);
         cursor: grab;
       }
       .tab {
