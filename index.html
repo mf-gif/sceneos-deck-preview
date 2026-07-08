@@ -1586,7 +1586,9 @@
         display: block;
       }
       /* + New chat — start a fresh branch/conversation (owner 2026-07-08 «добавь + чтобы можно было добавить
-         ещё чат/ветку»). Footer action, brand-blue, separated from the branch list. */
+         ещё чат/ветку»). Sits in the GENERAL group (right after General), ABOVE the divider + auto Active-
+         projects section — owner: projects are auto-created & you can't add to them until you're added, so new
+         chats belong to the user-creatable General zone, not the project list. Brand-blue. */
       .bsep {
         height: 1px;
         margin: 4px 6px;
@@ -3362,6 +3364,13 @@
               <span class="bi-name">General</span>
               <svg class="bi-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </button>
+            <button class="bnew" id="branchNew">
+              <span class="bi-plus">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              </span>
+              <span>New chat</span>
+            </button>
+            <div class="bsep"></div>
             <div class="bhdr">Active projects</div>
             <button class="bitem on" role="option" aria-selected="true">
               <span class="bi-dot"></span>
@@ -3377,13 +3386,6 @@
               <span class="bi-dot"></span>
               <span class="bi-name">Autumn Campaign</span>
               <svg class="bi-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            </button>
-            <div class="bsep"></div>
-            <button class="bnew" id="branchNew">
-              <span class="bi-plus">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-              </span>
-              <span>New chat</span>
             </button>
           </div>
         </div>
@@ -4433,7 +4435,7 @@
                 it.innerHTML =
                   '<span class="bi-dot"></span><span class="bi-name">New chat</span>' +
                   '<svg class="bi-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-                menu.insertBefore(it, menu.querySelector('.bsep'));
+                menu.insertBefore(it, addBtn);
                 wireItem(it);
                 selectItem(it);
               });
