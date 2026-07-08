@@ -1585,6 +1585,38 @@
       .bitem.on .bi-check {
         display: block;
       }
+      /* + New chat — start a fresh branch/conversation (owner 2026-07-08 «добавь + чтобы можно было добавить
+         ещё чат/ветку»). Footer action, brand-blue, separated from the branch list. */
+      .bsep {
+        height: 1px;
+        margin: 4px 6px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .bnew {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 9px 10px;
+        border-radius: 10px;
+        background: transparent;
+        border: 0;
+        color: var(--acc);
+        font: 600 13.5px/1 "General Sans", system-ui, sans-serif;
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.1s;
+      }
+      .bnew:hover {
+        background: rgba(77, 125, 255, 0.12);
+      }
+      .bnew .bi-plus {
+        width: 18px;
+        height: 18px;
+        flex: none;
+        display: grid;
+        place-items: center;
+      }
       /* ICON tab — nav-rail language (Lucide + .rail-amber): monochrome at rest → BLUE stroke + AMBER accent
          on hover AND select (owner «комбинация синего и жёлтых, как в левом баре»). Bigger touch targets. */
       .modetab {
@@ -3325,7 +3357,6 @@
             </svg>
           </button>
           <div class="branchmenu" id="branchMenu" role="listbox" hidden>
-            <div class="bhdr">Conversations</div>
             <button class="bitem" role="option" data-general>
               <span class="bi-dot"></span>
               <span class="bi-name">General</span>
@@ -3346,6 +3377,13 @@
               <span class="bi-dot"></span>
               <span class="bi-name">Autumn Campaign</span>
               <svg class="bi-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </button>
+            <div class="bsep"></div>
+            <button class="bnew" id="branchNew">
+              <span class="bi-plus">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              </span>
+              <span>New chat</span>
             </button>
           </div>
         </div>
@@ -4354,33 +4392,51 @@
             const chip = document.getElementById('branchChip');
             const menu = document.getElementById('branchMenu');
             const label = document.getElementById('branchLabel');
+            const addBtn = document.getElementById('branchNew');
             if (!chip || !menu) return;
             const closeMenu = () => {
               menu.hidden = true;
               chip.setAttribute('aria-expanded', 'false');
             };
+            const selectItem = (it) => {
+              menu.querySelectorAll('.bitem').forEach((x) => {
+                x.classList.remove('on');
+                x.setAttribute('aria-selected', 'false');
+              });
+              it.classList.add('on');
+              it.setAttribute('aria-selected', 'true');
+              const name = it.querySelector('.bi-name');
+              if (label && name)
+                label.textContent = it.hasAttribute('data-general') ? 'General' : name.textContent;
+              closeMenu();
+            };
+            const wireItem = (it) =>
+              it.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectItem(it);
+              });
+            menu.querySelectorAll('.bitem').forEach(wireItem);
             chip.addEventListener('click', (e) => {
               e.stopPropagation();
               const open = menu.hidden;
               menu.hidden = !open;
               chip.setAttribute('aria-expanded', open ? 'true' : 'false');
             });
-            menu.querySelectorAll('.bitem').forEach((it) => {
-              it.addEventListener('click', (e) => {
+            // + New chat — appends a fresh branch above the separator and selects it (mockup; real = create
+            // a new conversation/branch server-side).
+            if (addBtn)
+              addBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                menu.querySelectorAll('.bitem').forEach((x) => {
-                  x.classList.remove('on');
-                  x.setAttribute('aria-selected', 'false');
-                });
-                it.classList.add('on');
-                it.setAttribute('aria-selected', 'true');
-                const name = it.querySelector('.bi-name');
-                if (label && name)
-                  label.textContent =
-                    it.hasAttribute('data-general') ? 'General' : name.textContent;
-                closeMenu();
+                const it = document.createElement('button');
+                it.className = 'bitem';
+                it.setAttribute('role', 'option');
+                it.innerHTML =
+                  '<span class="bi-dot"></span><span class="bi-name">New chat</span>' +
+                  '<svg class="bi-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+                menu.insertBefore(it, menu.querySelector('.bsep'));
+                wireItem(it);
+                selectItem(it);
               });
-            });
             document.addEventListener('click', (e) => {
               if (!menu.hidden && !menu.contains(e.target) && e.target !== chip) closeMenu();
             });
