@@ -1612,12 +1612,18 @@
       .bnew:hover {
         background: rgba(77, 125, 255, 0.12);
       }
+      /* + icon sits in the SAME 7px lead column as the branch dots, so "New chat" text left-aligns exactly
+         with "General"/project names (owner 2026-07-08 «вровень с General, сдвигай влево»). */
       .bnew .bi-plus {
-        width: 18px;
-        height: 18px;
+        width: 7px;
+        height: 14px;
         flex: none;
         display: grid;
         place-items: center;
+        color: var(--acc);
+      }
+      .bnew .bi-plus svg {
+        overflow: visible;
       }
       /* ICON tab — nav-rail language (Lucide + .rail-amber): monochrome at rest → BLUE stroke + AMBER accent
          on hover AND select (owner «комбинация синего и жёлтых, как в левом баре»). Bigger touch targets. */
@@ -3366,7 +3372,7 @@
             </button>
             <button class="bnew" id="branchNew">
               <span class="bi-plus">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
               </span>
               <span>New chat</span>
             </button>
